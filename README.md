@@ -10,7 +10,7 @@
 **Verify both sides before money moves.**  
 *Real-time pre-settlement vault hold, acoustic intent interruption, and dual-party presence defense.*
 
-[Live Demo](#quickstart--running-locally) • [PRD](PRD.md) • [TRD](TRD.md) • [Architecture](ARCHITECTURE.md) • [Security Policy](SECURITY.md)
+[🌐 Live Web App](https://aayush1259.github.io/VoiceGuard/) • [PRD](PRD.md) • [TRD](TRD.md) • [Architecture](ARCHITECTURE.md) • [Security Policy](SECURITY.md)
 
 </div>
 
