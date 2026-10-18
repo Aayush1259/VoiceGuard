@@ -5,6 +5,7 @@ import { TransactionChecksPipeline } from './components/TransactionChecksPipelin
 import { SenderPhone } from './components/SenderPhone.jsx'
 import { RecipientPhone } from './components/RecipientPhone.jsx'
 import { PreSettlementChecksPage } from './components/PreSettlementChecksPage.jsx'
+import { Iso20022ZkSnarkPage } from './components/Iso20022ZkSnarkPage.jsx'
 import { BusinessModelsAndMoatPage } from './components/BusinessModelsAndMoatPage.jsx'
 import { UseCasesPage } from './components/UseCasesPage.jsx'
 import { PrivacyRegulationsPage } from './components/PrivacyRegulationsPage.jsx'
@@ -89,7 +90,10 @@ export function App() {
         {/* TAB 2: THE 4 PRE-SETTLEMENT CHECKS */}
         {activeTab === 'checks' && <PreSettlementChecksPage />}
 
-        {/* TAB 3: BUSINESS MODELS & MARKET MOAT */}
+        {/* TAB 3: ISO 20022 & ZK-SNARK ARCHITECTURE */}
+        {activeTab === 'isozk' && <Iso20022ZkSnarkPage />}
+
+        {/* TAB 4: BUSINESS MODELS & MARKET MOAT */}
         {activeTab === 'business' && <BusinessModelsAndMoatPage />}
 
         {/* TAB 4: USE CASES & PERSONAS */}

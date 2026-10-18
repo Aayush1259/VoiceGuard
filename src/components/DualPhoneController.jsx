@@ -15,6 +15,10 @@ export function DualPhoneController() {
     enableAccessibilityMode,
     isAccessibilityMode,
     isAsyncHold,
+    isReverseChallenge,
+    toggleReverseChallenge,
+    isExternalSpeakerAttack,
+    toggleExternalSpeakerAttack,
   } = useVoiceGuardStore()
 
   const personaMeta = {
@@ -125,6 +129,34 @@ export function DualPhoneController() {
           >
             <span>♿</span>
             <span>Ill / Mute Mode</span>
+          </button>
+
+          {/* Cognitive Hook Toggle */}
+          <button
+            onClick={toggleReverseChallenge}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+              isReverseChallenge
+                ? 'bg-amber-500 text-white shadow-xs font-bold'
+                : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700'
+            }`}
+            title="Toggle Reverse Word Cognitive Sanity Challenge"
+          >
+            <span>🧠</span>
+            <span>Reverse Hook: {isReverseChallenge ? 'ON' : 'OFF'}</span>
+          </button>
+
+          {/* Time-of-Flight Acoustic Distance Toggle */}
+          <button
+            onClick={toggleExternalSpeakerAttack}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+              isExternalSpeakerAttack
+                ? 'bg-rose-600 text-white shadow-xs font-bold animate-pulse'
+                : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700'
+            }`}
+            title="Toggle Ultrasonic Speaker-to-Mic Distance Check"
+          >
+            <span>📡</span>
+            <span>ToF: {isExternalSpeakerAttack ? '210cm (Attack Flagged)' : '13.8cm (Normal)'}</span>
           </button>
 
           <button

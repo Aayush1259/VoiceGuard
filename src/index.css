@@ -56,6 +56,18 @@
   min-height: 600px;
 }
 
+@media (max-width: 480px) {
+  .phone-case {
+    border-radius: 36px;
+    padding: 7px;
+    max-width: 100%;
+  }
+  .phone-screen {
+    border-radius: 28px;
+    min-height: 520px;
+  }
+}
+
 /* Phone Ringing Vibration */
 @keyframes ring-vibrate {
   0% { transform: rotate(0deg); }

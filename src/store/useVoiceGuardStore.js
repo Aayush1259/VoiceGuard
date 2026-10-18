@@ -35,6 +35,23 @@ export const useVoiceGuardStore = create((set, get) => ({
   isAccessibilityMode: false,
   selectedVisualWords: [],
 
+  // Cognitive Hook & Acoustic Time-of-Flight State
+  isReverseChallenge: false,
+  toggleReverseChallenge: () => set((state) => ({ isReverseChallenge: !state.isReverseChallenge })),
+
+  isExternalSpeakerAttack: false,
+  toggleExternalSpeakerAttack: () => set((state) => {
+    const nextAttack = !state.isExternalSpeakerAttack
+    return {
+      isExternalSpeakerAttack: nextAttack,
+      timeOfFlightDistance: nextAttack ? 210.4 : 13.8,
+    }
+  }),
+  timeOfFlightDistance: 13.8, // cm
+
+  isAudioVisualizing: false,
+  setAudioVisualizing: (val) => set({ isAudioVisualizing: val }),
+
   // Select Persona
   selectPersona: (personaId) => {
     const persona = PERSONAS_BY_ID[personaId]

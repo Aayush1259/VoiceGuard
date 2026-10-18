@@ -7,6 +7,7 @@ export function Header() {
   const tabs = [
     { id: 'demo', label: 'Live Demo' },
     { id: 'checks', label: 'The 4 Checks' },
+    { id: 'isozk', label: 'ISO 20022 & ZK' },
     { id: 'business', label: 'Business Models' },
     { id: 'usecases', label: 'Personas' },
     { id: 'privacy', label: 'Privacy & Legal' },

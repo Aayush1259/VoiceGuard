@@ -1,6 +1,7 @@
 import React from 'react'
 import { useVoiceGuardStore, CHALLENGE_WORDS, VISUAL_WORD_OPTIONS } from '../store/useVoiceGuardStore.js'
 import { PERSONAS_BY_ID } from '../data/personas.js'
+import { SoundwaveCanvas } from './SoundwaveCanvas.jsx'
 
 export function SenderPhone() {
   const {
@@ -19,6 +20,9 @@ export function SenderPhone() {
     answerJobQuestion,
     triggerTrustedDeviceAlert,
     lockCompromisedAccount,
+    isReverseChallenge,
+    isExternalSpeakerAttack,
+    timeOfFlightDistance,
   } = useVoiceGuardStore()
 
   const persona = PERSONAS_BY_ID[currentPersonaId] || PERSONAS_BY_ID['M1001']
@@ -26,14 +30,45 @@ export function SenderPhone() {
   return (
     <div className={`w-full max-w-[340px] phone-case ${scenarioStep === 'SENDER_VERIFYING' ? 'animate-ringing' : ''}`}>
       <div className="phone-screen">
-        {/* Status Bar */}
-        <div className="pt-2.5 px-5 pb-1.5 flex items-center justify-between text-[11px] font-semibold text-slate-800 bg-white border-b border-slate-100">
-          <span>9:41</span>
-          <div className="w-16 h-3.5 bg-slate-900 rounded-full mx-auto -mt-1 flex items-center justify-center">
-            <span className="w-2 h-2 rounded-full bg-slate-800"></span>
+        {/* Status Bar with Interactive Dynamic Island */}
+        <div className="pt-2 px-3.5 pb-1.5 flex items-center justify-between text-[11px] font-semibold text-slate-800 bg-white border-b border-slate-100 select-none">
+          <span className="font-mono text-xs font-bold text-slate-900">9:41</span>
+          
+          {/* Dynamic Island */}
+          <div className={`transition-all duration-300 mx-auto -mt-0.5 flex items-center justify-between overflow-hidden shadow-xs ${
+            scenarioStep === 'SENDER_VERIFYING'
+              ? 'w-48 h-5.5 bg-slate-950 text-white rounded-full px-2.5 text-[9px] border border-teal-500/50'
+              : scenarioStep === 'OUTCOME_CANCELLED'
+              ? 'w-48 h-5.5 bg-rose-950 text-rose-300 rounded-full px-2.5 text-[9px] border border-rose-500/50'
+              : scenarioStep === 'OUTCOME_APPROVED'
+              ? 'w-44 h-5.5 bg-emerald-950 text-emerald-300 rounded-full px-2.5 text-[9px] border border-emerald-500/50'
+              : 'w-20 h-4 bg-slate-950 rounded-full'
+          }`}>
+            {scenarioStep === 'SENDER_VERIFYING' ? (
+              <>
+                <span className="flex items-center gap-1 font-mono font-bold text-teal-300 truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></span>
+                  Sentry Escrow
+                </span>
+                <span className="text-[9px] font-mono text-slate-400">🎙️ 18.5kHz</span>
+              </>
+            ) : scenarioStep === 'OUTCOME_CANCELLED' ? (
+              <>
+                <span className="font-bold text-rose-300">🛑 Scam Cancelled</span>
+                <span className="font-mono text-[9px] text-emerald-400">Safe</span>
+              </>
+            ) : scenarioStep === 'OUTCOME_APPROVED' ? (
+              <>
+                <span className="font-bold text-emerald-300">✓ Funds Cleared</span>
+                <span className="text-[9px] text-emerald-400">Fedwire</span>
+              </>
+            ) : (
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-800 mx-auto"></span>
+            )}
           </div>
-          <div className="flex items-center gap-1 text-[10px]">
-            <span>5G</span>
+
+          <div className="flex items-center gap-1.5 text-[10px] text-slate-700 font-mono">
+            <span className="text-[9px] font-bold text-teal-800">5G</span>
             <span>100%</span>
           </div>
         </div>
@@ -115,29 +150,54 @@ export function SenderPhone() {
                     </p>
                   </div>
 
-                  {/* Wave visualizer */}
-                  <div className="flex items-center justify-center gap-1 h-7">
-                    <div className="w-1 bg-teal-500 rounded-full wave-bar"></div>
-                    <div className="w-1 bg-teal-600 rounded-full wave-bar"></div>
-                    <div className="w-1.5 bg-teal-700 rounded-full wave-bar"></div>
-                    <div className="w-1 bg-teal-600 rounded-full wave-bar"></div>
-                    <div className="w-1 bg-teal-500 rounded-full wave-bar"></div>
+                  {/* Live Soundwave Canvas Visualizer */}
+                  <div className="bg-slate-900/90 rounded-2xl p-2 border border-slate-800 shadow-inner">
+                    <div className="flex items-center justify-between px-2 text-[9px] font-mono text-teal-400 pb-0.5">
+                      <span>AUDIO SPECTRUM</span>
+                      <span className="flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                        18.5kHz FSK
+                      </span>
+                    </div>
+                    <SoundwaveCanvas isActive={true} isAlert={isExternalSpeakerAttack} height={32} />
                   </div>
 
-                  <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-1">
-                    <span className="text-[9px] uppercase font-bold text-slate-400 block">
-                      Please Repeat These 3 Random Words:
-                    </span>
+                  <div className="bg-white p-3 rounded-2xl border border-slate-200 space-y-1.5 shadow-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] uppercase font-bold text-slate-400 block">
+                        {isReverseChallenge ? 'Repeat In REVERSE Order:' : 'Repeat These 3 Words:'}
+                      </span>
+                      {isReverseChallenge && (
+                        <span className="text-[8px] font-mono font-bold bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded border border-amber-300">
+                          Cognitive Hook
+                        </span>
+                      )}
+                    </div>
                     <div className="flex justify-center gap-1.5 font-mono text-xs font-black text-slate-900">
-                      {CHALLENGE_WORDS.sender.map((w) => (
-                        <span key={w} className="px-2 py-0.5 bg-slate-100 rounded border border-slate-200">
+                      {(isReverseChallenge ? [...CHALLENGE_WORDS.sender].reverse() : CHALLENGE_WORDS.sender).map((w) => (
+                        <span key={w} className="px-2 py-1 bg-slate-100 rounded-lg border border-slate-200">
                           {w}
                         </span>
                       ))}
                     </div>
-                    <span className="text-[9px] font-mono text-teal-700 block">
-                      ✓ DeepMark Mic Watermarking Active
-                    </span>
+
+                    {/* Ultrasonic Time-of-Flight Status */}
+                    {isExternalSpeakerAttack ? (
+                      <div className="p-2 rounded-xl bg-rose-50 border border-rose-300 text-[10px] text-rose-900 text-left font-medium">
+                        <div className="flex items-center justify-between font-bold">
+                          <span>⚠️ ToF Alert: Remote Playback!</span>
+                          <span className="font-mono text-rose-700">{timeOfFlightDistance} cm</span>
+                        </div>
+                        <p className="text-[9px] text-rose-700 mt-0.5">
+                          Distance &gt;15cm threshold. Flagged external speaker / AI voice injection.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between text-[9px] font-mono text-emerald-800 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200">
+                        <span>✓ DeepMark Ultrasonic Loop</span>
+                        <span>ToF: {timeOfFlightDistance} cm (Handheld)</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-2 pt-1">

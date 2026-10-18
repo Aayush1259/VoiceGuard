@@ -7,8 +7,9 @@ export function Footer() {
   const navLinks = [
     { id: 'demo', label: 'Live Demo' },
     { id: 'checks', label: 'The 4 Checks' },
-    { id: 'business', label: 'C2C • B2C • B2B' },
-    { id: 'usecases', label: 'Member Personas' },
+    { id: 'isozk', label: 'ISO 20022 & ZK' },
+    { id: 'business', label: 'Business Models' },
+    { id: 'usecases', label: 'Personas' },
     { id: 'privacy', label: 'Privacy & Legal' },
   ]
 

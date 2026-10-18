@@ -1,6 +1,7 @@
 import React from 'react'
 import { useVoiceGuardStore, CHALLENGE_WORDS } from '../store/useVoiceGuardStore.js'
 import { PERSONAS_BY_ID } from '../data/personas.js'
+import { SoundwaveCanvas } from './SoundwaveCanvas.jsx'
 
 export function RecipientPhone() {
   const {
@@ -15,14 +16,45 @@ export function RecipientPhone() {
   return (
     <div className={`w-full max-w-[340px] phone-case ${scenarioStep === 'SENDER_DONE_WAITING_RECEIVER' ? 'animate-ringing' : ''}`}>
       <div className="phone-screen">
-        {/* Status Bar */}
-        <div className="pt-2.5 px-5 pb-1.5 flex items-center justify-between text-[11px] font-semibold text-slate-800 bg-white border-b border-slate-100">
-          <span>9:41</span>
-          <div className="w-16 h-3.5 bg-slate-900 rounded-full mx-auto -mt-1 flex items-center justify-center">
-            <span className="w-2 h-2 rounded-full bg-slate-800"></span>
+        {/* Status Bar with Interactive Dynamic Island */}
+        <div className="pt-2 px-3.5 pb-1.5 flex items-center justify-between text-[11px] font-semibold text-slate-800 bg-white border-b border-slate-100 select-none">
+          <span className="font-mono text-xs font-bold text-slate-900">9:41</span>
+          
+          {/* Dynamic Island */}
+          <div className={`transition-all duration-300 mx-auto -mt-0.5 flex items-center justify-between overflow-hidden shadow-xs ${
+            scenarioStep === 'SENDER_DONE_WAITING_RECEIVER'
+              ? 'w-48 h-5.5 bg-slate-950 text-white rounded-full px-2.5 text-[9px] border border-indigo-500/50'
+              : scenarioStep === 'REVIEW_DECISION'
+              ? 'w-44 h-5.5 bg-indigo-950 text-indigo-300 rounded-full px-2.5 text-[9px] border border-indigo-500/50'
+              : scenarioStep === 'OUTCOME_APPROVED'
+              ? 'w-44 h-5.5 bg-emerald-950 text-emerald-300 rounded-full px-2.5 text-[9px] border border-emerald-500/50'
+              : 'w-20 h-4 bg-slate-950 rounded-full'
+          }`}>
+            {scenarioStep === 'SENDER_DONE_WAITING_RECEIVER' ? (
+              <>
+                <span className="flex items-center gap-1 font-mono font-bold text-indigo-300 truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+                  Incoming Wire
+                </span>
+                <span className="text-[9px] font-mono text-slate-400">4h Hold</span>
+              </>
+            ) : scenarioStep === 'REVIEW_DECISION' ? (
+              <>
+                <span className="font-bold text-indigo-300">Dual Attestation</span>
+                <span className="text-[9px] text-indigo-400">Review</span>
+              </>
+            ) : scenarioStep === 'OUTCOME_APPROVED' ? (
+              <>
+                <span className="font-bold text-emerald-300">✓ Settled</span>
+                <span className="text-[9px] text-emerald-400">RTP</span>
+              </>
+            ) : (
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-800 mx-auto"></span>
+            )}
           </div>
-          <div className="flex items-center gap-1 text-[10px]">
-            <span>5G</span>
+
+          <div className="flex items-center gap-1.5 text-[10px] text-slate-700 font-mono">
+            <span className="text-[9px] font-bold text-indigo-800">5G</span>
             <span>98%</span>
           </div>
         </div>
@@ -116,6 +148,18 @@ export function RecipientPhone() {
                 <p className="text-[10px] text-slate-400 pt-1 border-t border-slate-100">
                   Recipient can finish verification whenever free.
                 </p>
+              </div>
+
+              {/* Live Soundwave Visualizer */}
+              <div className="bg-slate-900/90 rounded-2xl p-1.5 border border-slate-800 shadow-inner">
+                <div className="flex items-center justify-between px-2 text-[9px] font-mono text-indigo-400">
+                  <span>PAYEE ACOUSTIC CHANNEL</span>
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping"></span>
+                    Ready
+                  </span>
+                </div>
+                <SoundwaveCanvas isActive={true} height={26} />
               </div>
 
               <button
